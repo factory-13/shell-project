@@ -12,7 +12,7 @@
 # -------------------------------------------------------------------------------------------------------------------- #
 
 ext.project.install.user() {
-    username="${1}"
+    echo "User: "; read username
     user="web_${username}"
 
     useradd -b /home/storage/projects -m -s /bin/zsh ${user} && passwd ${user}
@@ -34,8 +34,8 @@ ext.project.install.directory() {
 # -------------------------------------------------------------------------------------------------------------------- #
 
 ext.project.install.vhost() {
-    username="${1}"
-    domain="${2}"
+    echo "User: "; read username
+    echo "Domain: "; read domain
     user="web_${username}"
 
     cat > /etc/httpd/vhosts.d/${domain}.ssl.conf <<EOF
