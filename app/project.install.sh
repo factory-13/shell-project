@@ -30,10 +30,10 @@ ext.project.install.directory() {
 }
 
 # -------------------------------------------------------------------------------------------------------------------- #
-# Create Apache & Nginx virtual host.
+# Create Apache virtual host.
 # -------------------------------------------------------------------------------------------------------------------- #
 
-ext.project.install.vhost() {
+ext.project.install.vhost.apache() {
     echo "User: "; read username
     echo "Domain: "; read domain
     user="web_${username}"
@@ -94,6 +94,17 @@ ext.project.install.vhost() {
 </VirtualHost>
 EOF
 
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+# Create NGINX virtual host.
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ext.project.install.vhost.nginx() {
+    echo "User: "; read username
+    echo "Domain: "; read domain
+    user="web_${username}"
+
     cat > /etc/nginx/vhosts.d/${domain}.ssl.proxy.conf <<EOF
 # -------------------------------------------------------------------------------------------------------------------- #
 # VirtualHost: ${domain}
@@ -122,7 +133,6 @@ server {
     # SSL.
     # ---------------------------------------------------------------------------------------------------------------- #
 
-    ssl                                 on;
     ssl_certificate                     "/home/storage/apps/app_certbot/.acme/certs/${domain}/fullchain.pem";
     ssl_certificate_key                 "/home/storage/apps/app_certbot/.acme/certs/${domain}/privkey.pem";
     ssl_trusted_certificate             "/home/storage/apps/app_certbot/.acme/certs/${domain}/chain.pem";
@@ -168,7 +178,6 @@ server {
     # SSL.
     # ---------------------------------------------------------------------------------------------------------------- #
 
-    ssl                                 on;
     ssl_certificate                     "/home/storage/apps/app_certbot/.acme/certs/${domain}/fullchain.pem";
     ssl_certificate_key                 "/home/storage/apps/app_certbot/.acme/certs/${domain}/privkey.pem";
     ssl_trusted_certificate             "/home/storage/apps/app_certbot/.acme/certs/${domain}/chain.pem";
@@ -178,6 +187,7 @@ server {
     # ---------------------------------------------------------------------------------------------------------------- #
 
     return 301 \$scheme://${domain}\$request_uri;
+
 }
 EOF
 }
